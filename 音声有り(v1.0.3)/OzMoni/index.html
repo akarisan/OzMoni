@@ -1,0 +1,88 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>OzMoni</title>
+        <style>
+            body{width: 90%;margin: 0 auto;padding-top: 70px;}
+            h1,h2,h3,h4{padding: 0;margin: 0;margin-top: 25px;}
+            h1{font-size: 10rem;text-align: center;}
+            h2{font-size: 7rem;}
+            h3{font-size: 2rem;text-align: right;border-bottom: 3px black solid;}
+            .no-border{border: none;}
+            h4{font-size: 4rem;text-align: right;width: 100%;}
+        </style>
+    </head>
+    <body>
+        <h3 class="no-border">Live Result Display「OzMoni」Made by Akari</h3>
+        <header>
+            <h3 id="event-class"></h3>
+            <h4 id="club"></h4>
+            <h1 id="name"></h1>
+            <h2 id="result"></h2>
+        </header>
+        
+        <iframe src="ozmoni-data.txt" type="text/plain" id="ozmonidata" style="display: none;"></iframe>
+        
+        
+        
+        <script>
+            var sameData = 'sample';
+            var ozmoniSys = function(){
+                document.getElementById('ozmonidata').contentDocument.location.replace('ozmoni-data.txt');
+                
+                var ozmoniData = document.getElementById('ozmonidata');
+                ozmoniData.onload = function(){
+                    var ozmonicont = ozmoniData.contentDocument.documentElement.textContent;
+                    var ozmoni = ozmonicont.split(',');
+                    populateHeader(ozmoni);
+                }
+                
+                function populateHeader(ozmoni){
+                    document.getElementById('event-class').innerHTML = ozmoni[0] + '：' + ozmoni[1];
+                    document.getElementById('club').innerHTML = ozmoni[2];
+                    document.getElementById('name').innerHTML = ozmoni[3];
+                    document.getElementById('result').innerHTML = '記録　' + ozmoni[4];
+                    
+                    var myName = String(ozmoni[3]);
+                    var sameData = document.cookie.split(';')[0].split('=')[1];
+                    
+                    if(sameData === myName){
+                        document.cookie = 'data=' + myName;
+                    }else{
+                        if(ozmoni[4].match(/:/)){
+                            var oztime = ozmoni[4].split(':');
+                            var timeH = oztime[0];
+                            var timeM = oztime[1];
+                            var timeS = oztime[2];
+                            var sptext = '記録は、' + timeH + 'じかん、' + timeM + 'ふん、' + timeS + 'です';
+                        }else if(ozmoni[4].match(/DNS/)){
+                            var sptext = 'この選手は欠席扱いになっています';
+                        }else if(ozmoni[4].match(/DNF/)){
+                            var sptext = 'フィニッシュの通過が、確認できませんでした';
+                        }else{
+                            var sptext = '記録にエラーがあります';
+                        }
+                        speak();
+                        
+                        function speak(){
+                            var resultSpk = new SpeechSynthesisUtterance(sptext);
+                            resultSpk.lang = 'ja-JP';
+                            resultSpk.volume = 1;
+                            resultSpk.rate = 1.3;
+                            resultSpk.pitch = 1;
+                            speechSynthesis.speak(resultSpk);
+                        }
+                        var sameData = String(ozmoni[3]);
+                        document.cookie = 'data=' + sameData;
+                    }
+                }
+                
+            setTimeout("ozmoniSys()",100);
+            }
+            
+            ozmoniSys();
+        </script>
+    </body>
+</html>

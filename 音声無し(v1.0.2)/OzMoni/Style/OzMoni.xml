@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mulka version="2.00" type="application/mulka+xml">
+	<style>
+
+		<name>OzMoni</name>
+		<version>1.0</version>
+		<author>Kengo Tomoda</author>
+		<target>competitor</target>
+		<method>print</method>
+		<type>result-board-individual</type>
+		<previewable>false</previewable>
+		<select></select>
+		
+        <command>
+            <export>
+				<folder>C:\OzMoni</folder>
+				<file-name>ozmoni-data.txt</file-name>
+				<transform method="unicode-text">OzMoni
+				.xsl</transform>
+			</export>
+		</command>
+
+	</style>
+</mulka>
