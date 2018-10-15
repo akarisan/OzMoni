@@ -1,2 +1,2 @@
 # OzMoni
-Live Result Display for Orienteering Result Center 「OzMoni」
+Live Result Display for Orienteering「OzMoni」
